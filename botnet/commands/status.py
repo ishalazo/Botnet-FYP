@@ -1,14 +1,17 @@
 import time
 import urllib.request
 import socket
-from botnet.commands.command_base import CommandBase
+import netifaces as ni
+
+from commands.command_base import CommandBase 
 
 class Status(CommandBase):
-    def __init__(self, command_type):
-        self.command_type = command_type
 
+# TODO: MAKE THE EXECUTE SEND A MESSAGE TO SERVER?
     def execute(self):
-        status = f"Command={self.command_type}, Hostname={self.hostname}, IP={self.ip}, Internet Access={self.internet_access}"
+        self.get_hostname_ip()
+        self.internet_reachability()
+        status = f"Hostname={self.hostname}, IP={self.ip}, Internet Access={self.internet_access}"
         self.timestamp = time.ctime(time.time())
         return status
     
@@ -17,7 +20,10 @@ class Status(CommandBase):
 
     def get_hostname_ip(self):
         self.hostname = socket.gethostname()   
-        self.ip = socket.gethostbyname(self.hostname)
+        # for windows: 
+        # self.ip = socket.gethostbyname(self.hostname)
+        # for linux:
+        self.ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
         return self.hostname, self.ip
     
     def internet_reachability(self, host='http://google.com'):
@@ -25,6 +31,21 @@ class Status(CommandBase):
         try:
             urllib.request.urlopen(host)
             self.internet_access = True
-            return self.internet_access
         except:
-            return self.internet_access
+            pass
+        return self.internet_access
+
+if __name__ == "__main__":
+    status_cmd = Status('status')
+
+    hostname, ip = status_cmd.get_hostname_ip()
+    print(f'Hostname: {hostname}, IP Address: {ip}')
+
+    internet_access = status_cmd.internet_reachability()
+    print(f'Internet Access: {internet_access}')
+
+    status = status_cmd.execute()
+    print(status)
+
+    metrics = status_cmd.get_metrics()
+    print(metrics)
