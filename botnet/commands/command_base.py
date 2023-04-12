@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 class CommandBase(ABC):
     @abstractmethod
-    def get_metrics(self):
+    def get_details(self):
         pass
 
     @abstractmethod

@@ -9,15 +9,15 @@ class EmailSpoof(CommandBase):
         self.password = password
         self.to_email = to_email
 
-    def get_metrics(self):
-        return f"Email sent at {self.time_sent}"
+    def get_details(self):
+        return f"Email subject title: \'{self.subject}\'\nFrom: {self.username}\nTo: {self.to_email}\nAt: {self.time_sent}"
 
     def execute(self): 
         outlook.username = self.username
         outlook.password = self.password
-        html_temp, subject = self.get_email_template()
+        html_temp = self.get_email_template()
         outlook.send(
-            subject=subject,
+            subject=self.subject,
             receivers=[self.to_email], 
             html=html_temp
         )
@@ -26,10 +26,5 @@ class EmailSpoof(CommandBase):
     def get_email_template(self):
         with open('commands/spam_templates/teams_email.html', 'r', encoding='iso-8859-1') as f:
             html_string = f.read()
-        subject = "Performance Check-up"
-        return html_string, subject
-    
-if __name__ == "__main__":
-    email = EmailSpoof('terry.kichirou@outlook.com','VtmVbnS3','wirav24020@dogemn.com')
-    email.execute()
-    print(email.get_metrics())
+        self.subject = "Performance Check-up"
+        return html_string
