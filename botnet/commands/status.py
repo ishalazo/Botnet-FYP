@@ -5,6 +5,7 @@ import netifaces as ni
 
 from commands.command_base import CommandBase 
 
+# Retrieves certain data about a client/bot
 class Status(CommandBase):
 
     def execute(self):
@@ -17,7 +18,7 @@ class Status(CommandBase):
         # for linux:
         self.ip = ni.ifaddresses('eth0')[ni.AF_INET][0]['addr']
 
-        # test internet reachability
+        # Rest internet reachability
         self.internet_access = False
         try:
             urllib.request.urlopen('http://google.com')
@@ -27,5 +28,6 @@ class Status(CommandBase):
 
         self.timestamp = time.ctime(time.time())
     
+    # Returns the details found as a string
     def get_details(self):
         return f"Hostname: {self.hostname}\nIP: {self.ip}\nInternet Access: {self.internet_access}\nStatus checked at \n{self.timestamp}"
