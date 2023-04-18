@@ -1,10 +1,10 @@
-**Disclaimer**: This project should be used for authorized testing or educational purposes only.
+**Disclaimer**: This project was created only as a university project and should only be used for authorized testing or educational purposes only.
 
 This Botnet Testing Tool is a testing tool that allows the user to simulate what a botnet can do to a system post-exploitaiton.
 
 It includes features such as:
 - A command and control (C&C) server
-- A botnet client
+- A botnet client script
 - 3 exploitations commands: Denial of Service (DoS), Email Spam and Status
 
 To the GUI run:
